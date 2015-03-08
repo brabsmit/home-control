@@ -9,4 +9,8 @@ urlpatterns = patterns('',
    url(r'^signout/$', 'app.views.signout'),
    url(r'^register/$', 'app.views.register'),
    url(r'^dashboard/$', 'app.views.dashboard'),
+   url(r'^settings/$', 'app.views.settings'),
+   url(r'^settings/account/$', 'app.views.settings_account'),
+   url(r'^settings/homes/$', 'app.views.settings_homes'),
+   url(r'^settings/change_home/$', 'app.views.settings_change_home'),
 )

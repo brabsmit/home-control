@@ -1,0 +1,28 @@
+<script>
+
+$('.btn').on('click', function(e) {
+	e.preventDefault();
+});
+
+$(function() {
+  $('#id_new_name').val("{{ home }}");
+});
+
+$('#submit-name').on("click", function(e) {
+   e.preventDefault();
+   $.post('/settings/home/{{ home.pk }}',
+      $('form#name-form').serialize()
+   );
+});
+</script>
+
+<form id="name-form" class="form-horizontal">
+   {% csrf_token %}
+   <fieldset>
+
+   <!-- Form Name -->
+   <legend>Home Settings</legend>
+   
+   {{ form }}
+
+</form>

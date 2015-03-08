@@ -15,6 +15,9 @@
                         <span class="name">Home Automation Begins Here</span>
                         <hr class="star-light">
                         <span class="skills">Interactive Dashboard - Realtime Stats - Full Remote Control</span>
+                        {% if user.is_authenticated %}
+                        <a href="/dashboard/"><span class="name"><button type="button" class="btn btn-lg btn-success">Dashboard</button></span></a>
+                        {% endif %}
                     </div>
                 </div>
             </div>

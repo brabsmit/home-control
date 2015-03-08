@@ -4,6 +4,7 @@
 {% block page_class %}sign-in{% endblock %}
 
 {% block content %}
+{% include "navbar.html" %}
 <div class="container">
   {% if user.is_authenticated %}
    <h1><a href="/dashboard/">Dashboard</a></h1>

@@ -1,0 +1,99 @@
+<script>
+$('.btn').on('click', function(e) {
+   e.preventDefault();
+});
+
+$(function() {
+  $('#id_new_username').val("{{ user.get_username }}");
+});
+
+function create_error_message(element, message) {
+   /*
+   <element>
+   <div class="alert alert-danger" role="alert">
+      Error: message
+   </div>
+   */
+   div = $('<div/>');
+   div.html("Error: "+message);
+   div.addClass('alert alert-danger error');
+   div.insertAfter(element);
+}
+
+$('#submit-username').on("click", function(e) {
+    e.preventDefault();
+    $.post('/settings/account/',
+      $('form#username-form').serialize(),
+      function (data) {
+        if (data.success) {
+          $('#id_new_username').val(data.username);
+          $('.error').remove();
+        } else {
+          create_error_message($('#id_new_username'), data.errors[0]);
+        }
+      });
+  });
+  
+  $('#submit-password').on("click", function(e) {
+    e.preventDefault();
+    $.post('/settings/account/',
+      $('form#password-form').serialize(),
+      function (data) {
+        if (data.success) {
+          $('.error').remove();
+        } else {
+          create_error_message($('#id_password2'), data.errors[0]);
+        }
+      });
+  });
+</script>
+
+<form id="username-form" class="form-horizontal">
+
+{% csrf_token %}
+
+<fieldset>
+
+<!-- Form Name -->
+<legend>Account Settings</legend>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="username">Username</label>  
+  <div class="col-md-4">
+  {{ form.new_username }}
+  <!--input id="id_new_username" name="username" type="text" placeholder="{{ user.get_username }}" class="form-control input-md"-->
+  <button style="margin-top:10px;" id="submit-username" name="singlebutton" class="btn btn-primary">Rename</button>
+  </div>
+  <div id="username-status" class="col-md-2"></div>
+</div>
+</form>
+
+<form id="password-form">
+
+{% csrf_token %}
+
+<!-- Password input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="passwordinput">New Password</label>
+  <div class="col-md-4">
+    {{ form.password1 }}
+    <!--input id="passwordinput" name="passwordinput" type="password" placeholder="*****" class="form-control input-md"-->
+  </div>
+  <div id="password-status" class="col-md-2"></div>
+</div>
+
+<!-- Password input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="passwordconfirminput">Confirm Password</label>
+  <div class="col-md-4">
+    {{ form.password2 }}
+    <!--input id="passwordconfirminput" name="passwordconfirminput" type="password" placeholder="*****" class="form-control input-md"-->
+    <button style="margin-top:10px;" id="submit-password" name="singlebutton" class="btn btn-primary">Change Password</button>
+  </div>
+</div>
+
+</fieldset>
+
+<fieldset>
+</form>

@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from geoposition.fields import GeopositionField
 from app import snippets
+from django.forms import ModelForm
 
 import string
 import random
@@ -48,6 +49,11 @@ class Home(models.Model):
    def __unicode__(self):
       return self.owner.username + ": " + self.name
 
+      
+class HomeForm(ModelForm):
+   class Meta:
+      model = Home
+      fields = ['name','position']
       
 class Room(models.Model):
    """Room model.
