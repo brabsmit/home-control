@@ -1,5 +1,5 @@
 """
-Django settings for homecontrol project.
+Django settings for seads project.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/1.7/topics/settings/
@@ -12,12 +12,38 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
+TEMPLATE_DIRS = (
+    BASE_DIR + '/home/templates/',
+    BASE_DIR + '/webapp/templates/',
+)
+
+LOGIN_REDIRECT_URL = '/'
+
+STATICFILES_FINDERS = (
+   'django.contrib.staticfiles.finders.FileSystemFinder',
+   'django.contrib.staticfiles.finders.AppDirectoriesFinder'
+)
+
+STATIC_URL = '/home/seads/webapp/static/'
+
+STATIC_ROOT = '/static/'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+}
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'f-!0kju%0#c8*o8qf^=4gm9a8c@w6b^9ds0e^2@kael4fm75jm'
+SECRET_KEY = 'n$ibk0^yobvqlfp2b*2(!rmvu0i3pzjyc0g=2^(crwl+(-rsot'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -26,14 +52,10 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
-STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder'
-)
-
-STATIC_URL = '/home/ubuntu/home-control/homecontrol/static/'
-
-STATIC_ROOT = '/static/'
+GRAPH_MODELS = {
+  'all_applications': True,
+  'group_models': True,
+}
 
 # Application definition
 
@@ -44,10 +66,13 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
+    'rest_framework.authtoken',
     'rest_framework',
     'rest_framework_swagger',
-    'geoposition',
-    'app',
+    'microdata',
+    'webapp',
+    'home',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -60,9 +85,11 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'homecontrol.urls'
 
-WSGI_APPLICATION = 'homecontrol.wsgi.application'
+ROOT_URLCONF = 'seads.urls'
+
+WSGI_APPLICATION = 'seads.wsgi.application'
+
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
