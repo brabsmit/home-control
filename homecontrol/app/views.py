@@ -6,7 +6,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
 from geoposition import Geoposition
-from app.models import Home, Light, Door, Refrigerator, Thermostat
+from app.models import Home, Room, Light, Door, Refrigerator, Thermostat
 from app.serializers import LightSerializer, DoorSerializer, RefrigeratorSerializer, ThermostatSerializer
 
 from rest_framework.response import Response
@@ -122,7 +122,30 @@ def signout(request):
    
 @login_required(login_url='/signin/')
 def dashboard(request):
-   return render(request, 'dashboard.html')
+   context = {}
+   if request.method == 'GET':
+      user = User.objects.get(username=request.user)
+      # get homes
+      context['homes'] = Home.objects.filter(owner=user)
+      context['rooms'] = {}
+      context['lights'] = {}
+      context['refrigerators'] = {}
+      context['thermostats'] = {}
+      context['doors'] = {}
+      # get rooms
+      for home in context['homes']:
+         context['rooms'][home.pk] = Room.objects.filter(home=home)
+         # get thermostats
+         context['thermostats'][home.pk] = Thermostat.objects.filter(home=home)
+         # get devices
+         for room in context['rooms'][home.pk]:
+            # get lights
+            context['lights'][room.pk] = Light.objects.filter(room=room)
+            # get refrigerators
+            context['refrigerators'][room.pk] = Refrigerator.objects.filter(room=room)
+            # get doors
+            context['doors'][room.pk] = Door.objects.filter(room=room)
+   return render(request, 'dashboard.html', context)
 
    
 @login_required(login_url='/signin/')

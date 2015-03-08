@@ -4,8 +4,57 @@
 {% block page_class %}dashboard{% endblock %}
 
 {% block content %}
+<script src="{{ STATIC_URL }}/js/raphael.2.1.0.min.js"></script>
+<script src="{{ STATIC_URL }}/js/justgage.1.0.1.min.js"></script>
 {% include "navbar.html" %}
+
 <div class="container">
-   dashboard
+{% for home in homes %}
+   <div id="home-container" class="row">
+   <h2>{{ home.name }}</h2>
+   <p>Thermostats: 
+   {% for value in thermostats.values %}
+      {% if value.0.home == home %}
+         <div id="gauge{{ value.0.pk }}" class="200x160px"></div>
+         <script>
+            var g = new JustGage({
+            id: "gauge{{ value.0.pk }}",
+            value: {{ value.0.current_temp }},
+            min: 20,
+            max: 120,
+            title: "Current Temperature"
+            });
+         </script>
+      {% endif %}
+   {% endfor %} <!-- thermostats -->
+   </p>
+   {% for room in rooms.1 %}
+   <div id="room-container">
+      <p>Room: {{ room.name }}</p>
+      <p>Lights: 
+      {% for value in lights.values %}
+         {% if value.0.room == room %}
+            {{ value }}
+         {% endif %}
+      {% endfor %} <!-- lights -->
+      </p>
+      <p>Doors: 
+      {% for value in doors.values %}
+         {% if value.0.room == room %}
+            {{ value }}
+         {% endif %}
+      {% endfor %} <!-- doors -->
+      </p>
+      <p>Refrigerators: 
+      {% for value in refrigerators.values %}
+         {% if value.0.room == room %}
+            {{ value }}
+         {% endif %}
+      {% endfor %} <!-- refrigerators -->
+      </p>
+   </div> <!-- room container -->
+   {% endfor %} <!-- rooms -->
+</div> <!-- home-container -->
+{% endfor %} <!-- homes -->
 </div>
 {% endblock %}
