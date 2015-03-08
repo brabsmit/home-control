@@ -1,5 +1,5 @@
 from django.contrib import admin
-from app.models import Home, Room, Thermostat, Door, Light
+from app.models import Home, Room, Thermostat, Door, Light, Refrigerator
 
 """@package(docstring)
 Administrator interface customization
@@ -33,12 +33,20 @@ class LightAdmin(admin.ModelAdmin):
 
 class LightInline(admin.StackedInline):
    model = Light
+
+
+class RefrigeratorAdmin(admin.ModelAdmin):
+   list_display = ('name','room','fridge_set_temp','fridge_current_temp','freezer_set_temp','freezer_current_temp',)
+   search_fields = ('name','room')
+
+class RefrigeratorInline(admin.StackedInline):
+   model = Refrigerator
    
    
 class RoomAdmin(admin.ModelAdmin):
-   list_display = ('name','room_type',)
+   list_display = ('home','name','room_type',)
    search_fields = ('name','home')
-   inlines = (DoorInline, LightInline,)
+   inlines = (DoorInline, LightInline, RefrigeratorInline,)
 
 class RoomInline(admin.StackedInline):
    model = Room
@@ -56,3 +64,4 @@ admin.site.register(Thermostat, ThermostatAdmin)
 admin.site.register(Room, RoomAdmin)
 admin.site.register(Door, DoorAdmin)
 admin.site.register(Light, LightAdmin)
+admin.site.register(Refrigerator, RefrigeratorAdmin)

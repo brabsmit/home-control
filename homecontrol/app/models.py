@@ -103,8 +103,8 @@ class Light(models.Model):
    ## foreign key linking a light to its room in a home
    room = models.ForeignKey(Room)
    
-   ## optional name of the light supplied by the user.
-   name = models.CharField(max_length=30, blank=True, null=True)
+   ## name of the light supplied by the user.
+   name = models.CharField(max_length=30, default='Light')
    
    BINARY = 'BN'
    VARIABLE = 'VB'
@@ -118,6 +118,33 @@ class Light(models.Model):
       choices = SWITCH_MODE_CHIOICES,
                                        default=BINARY)
                                        
+
+class Refrigerator(models.Model):
+   """Refrigerator model.
+   
+   This model exposes the refrigerator to the home control. It is
+   designed to read and write fridge/freezer temperature.
+   """
+   
+   ## foreign key linking a light to its room in a home
+   room = models.ForeignKey(Room)
+   
+   ## name of the light supplied by the user.
+   name = models.CharField(max_length=30, default='Refrigerator')
+   
+   ## thermostat temperature of refrigeration chamber
+   fridge_set_temp = models.IntegerField(default=36)
+   
+   ## temperature reading of refrigeration chamber
+   fridge_current_temp = models.IntegerField()
+   
+   ## thermostat temperature of freezer chamber
+   freezer_set_temp = models.IntegerField(default=36)
+   
+   ## temperature reading of freezer chamber
+   freezer_current_temp = models.IntegerField()
+                                       
+                                       
 class Thermostat(models.Model):
    """Nest-like thermostat model.
    
@@ -130,7 +157,7 @@ class Thermostat(models.Model):
    ## foreign key linking a room to its home
    home = models.ForeignKey(Home)
    
-   ## optional name of the light supplied by the user.
+   ## name of the light supplied by the user.
    name = models.CharField(max_length=30, default='Thermostat')
    
    AIR_CONDITION = 'AC'
@@ -157,8 +184,8 @@ class Door(models.Model):
    ## foreign key linking a light to its room in a home
    room = models.ForeignKey(Room)
    
-   ## optional name of the light supplied by the user.
-   name = models.CharField(max_length=30, blank=True, null=True)
+   ## name of the light supplied by the user.
+   name = models.CharField(max_length=30, default='Door')
    
    ## boolean field specifying if a door is locked or unlocked.
    locked = models.BooleanField(default=False)
