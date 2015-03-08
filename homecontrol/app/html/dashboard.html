@@ -8,6 +8,36 @@
 <script src="{{ STATIC_URL }}/js/justgage.1.0.1.min.js"></script>
 {% include "navbar.html" %}
 
+<script>
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", $.cookie('csrftoken'));
+        }
+    }
+});
+
+function update_light(element, pk, state) {
+   var l = Ladda.create(element);
+   l.start();
+   $.ajax({
+      type: "PATCH",
+      url: "/api/light/"+pk+"/", 
+      data: {
+         'is_on' : !state,
+      }
+   }).done(function(response){
+         console.log(response);
+   })
+   .always(function() { l.stop(); });
+   return false;
+}
+</script>
+
 <div class="container">
 {% for home in homes %}
    <div id="home-container" class="row">
@@ -34,7 +64,27 @@
       <p>Lights: 
       {% for value in lights.values %}
          {% if value.0.room == room %}
-            {{ value }}
+            {% if value.0.is_on %}
+            <a href="javascript:void(0)"><button class="btn btn-danger ladda-button" id="button_light_{{ value.0.pk }}" data-style="zoom-in"><span class="ladda-label">{{ value.0.name }}</span></button></a>
+            <script>
+            $(function() {
+               $('#button_light_{{ value.0.pk }}').click(function(e){
+                  e.preventDefault();
+                  update_light(this, {{ value.0.pk }}, {{ value.0.is_on|yesno:"true,false" }})
+               });
+            });
+            </script>
+            {% else %}
+            <a href="javascript:void(0)"><button class="btn btn-success ladda-button" id="button_light_{{ value.0.pk }}" data-style="zoom-in"><span class="ladda-label">{{ value.0.name }}</span></button></a>
+            <script>
+            $(function() {
+               $('#button_light_{{ value.0.pk }}').click(function(e){
+                  e.preventDefault();
+                  update_light(this, {{ value.0.pk }}, {{ value.0.is_on|yesno:"true,false" }})
+               });
+            });
+            </script>
+            {% endif %}
          {% endif %}
       {% endfor %} <!-- lights -->
       </p>
