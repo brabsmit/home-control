@@ -1,5 +1,15 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
+from rest_framework import routers, serializers, viewsets
+from app import views
+
+
+router = routers.DefaultRouter()
+router.register(r'light', views.LightViewSet)
+router.register(r'refrigerator', views.RefrigeratorViewSet)
+router.register(r'thermostat', views.ThermostatViewSet)
+router.register(r'door', views.DoorViewSet)
+
 
 urlpatterns = patterns('',
    url(r'^admin/', include(admin.site.urls)),
@@ -11,4 +21,6 @@ urlpatterns = patterns('',
    url(r'^dashboard/$', 'app.views.dashboard'),
    url(r'^settings/$', 'app.views.settings'),
    url(r'^settings/account/$', 'app.views.settings_account'),
+   
+   url(r'^api/', include(router.urls)),
 )

@@ -6,7 +6,11 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
 from geoposition import Geoposition
-from app.models import Home
+from app.models import Home, Light, Door, Refrigerator, Thermostat
+from app.serializers import LightSerializer, DoorSerializer, RefrigeratorSerializer, ThermostatSerializer
+
+from rest_framework.response import Response
+from rest_framework import viewsets
 
 from django.db import IntegrityError
 
@@ -14,6 +18,35 @@ from sets import Set
 import json
 
 # Create your views here.
+
+class LightViewSet(viewsets.ModelViewSet):
+   """
+   API endpoint that allows lights to be viewed or edited.
+   """
+   queryset = Light.objects.all()
+   serializer_class = LightSerializer
+
+class DoorViewSet(viewsets.ModelViewSet):
+   """
+   API endpoint that allows doors to be viewed or edited.
+   """
+   queryset = Door.objects.all()
+   serializer_class = DoorSerializer
+
+class RefrigeratorViewSet(viewsets.ModelViewSet):
+   """
+   API endpoint that allows refrigerators to be viewed or edited.
+   """
+   queryset = Refrigerator.objects.all()
+   serializer_class = RefrigeratorSerializer
+   
+class ThermostatViewSet(viewsets.ModelViewSet):
+   """
+   API endpoint that allows thermostats to be viewed or edited.
+   """
+   queryset = Thermostat.objects.all()
+   serializer_class = ThermostatSerializer
+   
 
 # SettingsForm is an extension of an AuthenticationForm
 class SettingsForm(forms.Form):

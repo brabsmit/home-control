@@ -58,8 +58,14 @@ INSTALLED_APPS = (
     'rest_framework',
     'rest_framework_swagger',
     'geoposition',
+    'ws4redis',
     'app',
 )
+
+WEBSOCKET_URL = '/ws/'
+
+SESSION_ENGINE = 'redis_sessions.session'
+SESSION_REDIS_PREFIX = 'session'
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',

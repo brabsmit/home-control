@@ -12,7 +12,7 @@ custom models.
 
 
 class ThermostatAdmin(admin.ModelAdmin):
-   list_display = ('name','home',)
+   list_display = ('name','home','current_temp','set_temp')
    search_fields = ('name','home')
 
 class ThermostatInline(admin.StackedInline):
@@ -20,7 +20,7 @@ class ThermostatInline(admin.StackedInline):
 
    
 class DoorAdmin(admin.ModelAdmin):
-   list_display = ('name','room','locked',)
+   list_display = ('name','room','is_locked','is_open')
    search_fields = ('name','room')
 
 class DoorInline(admin.StackedInline):
@@ -28,7 +28,7 @@ class DoorInline(admin.StackedInline):
 
    
 class LightAdmin(admin.ModelAdmin):
-   list_display = ('name','room','switch_mode',)
+   list_display = ('name','room','switch_mode','is_on')
    search_fields = ('name','room')
 
 class LightInline(admin.StackedInline):

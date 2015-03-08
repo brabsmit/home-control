@@ -107,6 +107,9 @@ class Light(models.Model):
    ## name of the light supplied by the user.
    name = models.CharField(max_length=30, default='Light')
    
+   ## boolean indicating if the light is on or off.
+   is_on = models.BooleanField(default=False)
+   
    BINARY = 'BN'
    VARIABLE = 'VB'
    SWITCH_MODE_CHIOICES = (
@@ -140,7 +143,7 @@ class Refrigerator(models.Model):
    fridge_current_temp = models.IntegerField()
    
    ## thermostat temperature of freezer chamber
-   freezer_set_temp = models.IntegerField(default=36)
+   freezer_set_temp = models.IntegerField(default=0)
    
    ## temperature reading of freezer chamber
    freezer_current_temp = models.IntegerField()
@@ -160,6 +163,12 @@ class Thermostat(models.Model):
    
    ## name of the light supplied by the user.
    name = models.CharField(max_length=30, default='Thermostat')
+   
+   ## temperature as measured by a thermometer
+   current_temp = models.IntegerField()
+   
+   ## temperature set by the user
+   set_temp = models.IntegerField()
    
    AIR_CONDITION = 'AC'
    HEATER = 'HT'
@@ -189,7 +198,10 @@ class Door(models.Model):
    name = models.CharField(max_length=30, default='Door')
    
    ## boolean field specifying if a door is locked or unlocked.
-   locked = models.BooleanField(default=False)
+   is_locked = models.BooleanField(default=False)
+   
+   ## boolean field specifying if a door is open or unopened.
+   is_open = models.BooleanField(default=False)
    
    
    
