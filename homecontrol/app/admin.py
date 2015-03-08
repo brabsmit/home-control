@@ -1,5 +1,5 @@
 from django.contrib import admin
-from app.models import Home
+from app.models import Home, Room, Thermostat, Door, Light
 
 """@package(docstring)
 Administrator interface customization
@@ -10,9 +10,49 @@ the custom administrator actions that correspond to the application's
 custom models.
 """
 
+
+class ThermostatAdmin(admin.ModelAdmin):
+   list_display = ('name','home',)
+   search_fields = ('name','home')
+
+class ThermostatInline(admin.StackedInline):
+   model = Thermostat
+
+   
+class DoorAdmin(admin.ModelAdmin):
+   list_display = ('name','room','locked',)
+   search_fields = ('name','room')
+
+class DoorInline(admin.StackedInline):
+   model = Door
+
+   
+class LightAdmin(admin.ModelAdmin):
+   list_display = ('name','room','switch_mode',)
+   search_fields = ('name','room')
+
+class LightInline(admin.StackedInline):
+   model = Light
+   
+   
+class RoomAdmin(admin.ModelAdmin):
+   list_display = ('name','room_type',)
+   search_fields = ('name','home')
+   inlines = (DoorInline, LightInline,)
+
+class RoomInline(admin.StackedInline):
+   model = Room
+
+
 class HomeAdmin(admin.ModelAdmin):
-   list_display = ('name','owner','serial','position','secret_key',)
-   search_fields = ('name','serial')
+   list_display = ('name','owner','position','secret_key',)
+   search_fields = ('name',)
    readonly_fields=('secret_key',)
+   inlines = (ThermostatInline, RoomInline, )
+
 
 admin.site.register(Home, HomeAdmin)
+admin.site.register(Thermostat, ThermostatAdmin)
+admin.site.register(Room, RoomAdmin)
+admin.site.register(Door, DoorAdmin)
+admin.site.register(Light, LightAdmin)
