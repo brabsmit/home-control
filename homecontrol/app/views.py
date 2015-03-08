@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, render_to_response
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -6,7 +6,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
 from geoposition import Geoposition
-from app.models import Home, HomeForm
+from app.models import Home
 
 from django.db import IntegrityError
 
@@ -98,12 +98,7 @@ def settings(request):
    user = request.user.id
    template = 'settings.html'
    if request.method == 'GET':
-      if request.GET.get('home', False):
-         homes = Home.objects.filter(owner=request.user)
-         context['homes'] = homes
-         template = 'settings_homes_base.html'
-
-      elif request.GET.get('account', False):
+      if request.GET.get('account', False):
          form = SettingsForm()
          context['form'] = form
          user = User.objects.get(username=request.user)
@@ -164,45 +159,3 @@ def settings_account(request):
     context['errors'] = list(errors)
     return HttpResponse(json.dumps(context), content_type="application/json")
   else: return render(request, 'settings.html')
-
-  
-@login_required(login_url='/signin/')
-def settings_change_home(request):
-   context = {}
-   if request.method == 'GET':
-      serial = request.GET.get('pk')
-      if serial:
-         user = User.objects.get(username = request.user)
-         home = Home.objects.get(pk=serial)
-         if home.owner == user:
-            form = HomeForm(instance=home)
-            context['home'] = home
-            context['form'] = form
-   return render(request, 'settings_homes.html', context)
-   
-   
-@login_required(login_url='/signin/')
-def settings_homes(request, serial):
-   context = {}
-   if request.method == 'POST':
-      context['success'] = False
-      user = User.objects.get(username=request.user)
-      home = Home.objects.get(pk=serial)
-      if home.owner == user:
-         form = HomeForm(request.POST)
-
-         if form.is_valid():
-            user = User.objects.get(username = request.user)
-            new_name = form.cleaned_data['name']
-            template = 'settings_homes.html'
-            home = Home.objects.get(pk=serial)
-
-            if home.owner == user:
-               if new_name:
-                  home.name = new_name
-                  home.save()
-                  context['new_name'] = home.name
-                  context['success'] = True       
-
-      return HttpResponse(json.dumps(context), content_type="application/json")
-   else: return render(request, 'settings.html')

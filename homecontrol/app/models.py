@@ -50,11 +50,6 @@ class Home(models.Model):
       return self.owner.username + ": " + self.name
 
       
-class HomeForm(ModelForm):
-   class Meta:
-      model = Home
-      fields = ['name','position']
-      
 class Room(models.Model):
    """Room model.
    
