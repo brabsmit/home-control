@@ -8,6 +8,19 @@
 <script src="{{ STATIC_URL }}/js/justgage.1.0.1.min.js"></script>
 {% include "navbar.html" %}
 
+<style>
+   .border-top,.border-right,.border-bottom,.border-left,.border {
+      border-color:#ccc;
+      border-style:solid;
+      border-width:0;
+   }
+
+   .border {
+      border-width:1px;
+      margin: 10px;
+   }
+</style>
+
 <script>
 function csrfSafeMethod(method) {
     // these HTTP methods do not require CSRF protection
@@ -45,32 +58,147 @@ function update_light(element, pk) {
    .always(function() { l.stop(); });
    return false;
 }
+
+function update_door_lock(element, pk) {
+   var l = Ladda.create(element);
+   var is_locked = $(element).val() === 'true';
+   l.start();
+   $.ajax({
+      type: "PATCH",
+      url: "/api/door/"+pk+"/", 
+      data: {
+         'is_locked' : !is_locked,
+      }
+   }).done(function(response){
+      if(response.is_locked) {
+         $(element).html("Locked");
+         $(element).val('true');
+      } else {
+         $(element).html("Unlocked");
+         $(element).val('false');
+      }
+   })
+   .always(function() { l.stop(); });
+   return false;
+}
+
+function update_door_state(element, pk) {
+   var l = Ladda.create(element);
+   var is_open = $(element).val() === 'true';
+   l.start();
+   $.ajax({
+      type: "PATCH",
+      url: "/api/door/"+pk+"/", 
+      data: {
+         'is_open' : !is_open,
+      }
+   }).done(function(response){
+      if(response.is_open) {
+         $(element).html("Open");
+         $(element).val('true');
+      } else {
+         $(element).html("Closed");
+         $(element).val('false');
+      }
+   })
+   .always(function() { l.stop(); });
+   return false;
+}
+
+function update_freezer_value(pk, value) {
+   $.ajax({
+      type: "PATCH",
+      url: "/api/refrigerator/"+pk+"/", 
+      data: {
+         'freezer_set_temp' : value
+      }
+   })
+}
+
+function update_fridge_value(pk, value) {
+   $.ajax({
+      type: "PATCH",
+      url: "/api/refrigerator/"+pk+"/", 
+      data: {
+         'fridge_set_temp' : value
+      }
+   })
+}
+
+function update_thermostat_value(pk, value) {
+   $.ajax({
+      type: "PATCH",
+      url: "/api/thermostat/"+pk+"/", 
+      data: {
+         'set_temp' : value
+      }
+   })
+}
+
+
+//https://remysharp.com/2010/07/21/throttling-function-calls
+function throttle(fn, threshhold, scope) {
+  threshhold || (threshhold = 250);
+  var last,
+      deferTimer;
+  return function () {
+    var context = scope || this;
+
+    var now = +new Date,
+        args = arguments;
+    if (last && now < last + threshhold) {
+      // hold on to it
+      clearTimeout(deferTimer);
+      deferTimer = setTimeout(function () {
+        last = now;
+        fn.apply(context, args);
+      }, threshhold);
+    } else {
+      last = now;
+      fn.apply(context, args);
+    }
+  };
+}
 </script>
 
-<div class="container">
+<div class="container border">
 {% for home in homes %}
    <div id="home-container" class="row">
    <h2>{{ home.name }}</h2>
    <p>Thermostats: 
-   {% for value in thermostats.values %}
-      {% if value.0.home == home %}
-         <div id="gauge{{ value.0.pk }}" class="200x160px"></div>
-         <script>
-            var g = new JustGage({
-            id: "gauge{{ value.0.pk }}",
-            value: {{ value.0.current_temp }},
-            min: 20,
-            max: 120,
-            title: "Current Temperature"
-            });
-         </script>
-      {% endif %}
-   {% endfor %} <!-- thermostats -->
+   {% for values in thermostats.values %}
+      {% for thermostat in values %}
+         {% if thermostat.home == home %}
+            <div id="gauge{{ thermostat.pk }}" class="200x160px"></div>
+            <script>
+               var g = new JustGage({
+                  id: "gauge{{ thermostat.pk }}",
+                  value: {{ thermostat.current_temp }},
+                  min: 20,
+                  max: 120,
+                  title: "Current Temperature",
+               });
+            </script>
+            <label for="slider_thermostat_{{ thermostat.pk }}">Set Temp</label>
+               <input id="slider_thermostat_{{ thermostat.pk }}" type="text" data-slider-min="50" data-slider-max="100" data-slider-step="1" data-slider-value="{{ thermostat.set_temp }}" data-slider-orientation="vertical"/>
+               <script>
+                  var slider = new Slider("#slider_thermostat_{{ thermostat.pk }}", {
+                     reversed : true,
+                     tooltip: 'always'
+                  });
+                  slider.on("slide", throttle(function (value) {
+                        update_thermostat_value({{ thermostat.pk }}, value);
+                     }, 1000)
+                  );
+               </script>
+         {% endif %}
+      {% endfor %} <!-- thermostats -->
+   {% endfor %} <!-- values -->
    </p>
    {% for room in rooms.1 %}
-   <div id="room-container">
-      <p>Room: {{ room.name }}</p>
-      <p>Lights: 
+   <div id="room-container" class="border">
+      <h3>{{ room.name }}</h3>
+      <p>
       {% for values in lights.values %}
          {% for light in values %}
             {% if light.room == room %}
@@ -99,21 +227,87 @@ function update_light(element, pk) {
          {% endfor %} <!-- lights -->
       {% endfor %} <!-- values -->
       </p>
-      <p>Doors: 
+      <p>
       {% for values in doors.values %}
          {% for door in values %}
             {% if door.room == room %}
                {{ door.name }}
+               <div class="btn-group" role="group" aria-label="...">
+                  <button type="button" class="btn btn-primary ladda-button" id="button_door_state_{{ door.pk }}" value='{{ door.is_open|yesno:"true,false" }}"' data-style="zoom-in">{{ door.is_open|yesno:"Open,Closed" }}</button>
+                  <script>
+                     $(function() {
+                        $('#button_door_state_{{ door.pk }}').click(function(e){
+                           e.preventDefault();
+                           update_door_state(this, {{ door.pk }})
+                        });
+                     });
+                  </script>
+                  <button type="button" class="btn btn-primary ladda-button" id="button_door_lock_{{ door.pk }}" value='{{ door.is_open|yesno:"true,false" }}"' data-style="zoom-in">{{ door.is_locked|yesno:"Locked,Unlocked"}}</button>
+                  <script>
+                     $(function() {
+                        $('#button_door_lock_{{ door.pk }}').click(function(e){
+                           e.preventDefault();
+                           update_door_lock(this, {{ door.pk }})
+                        });
+                     });
+                  </script>
+               </div>
             {% endif %} <!-- if door.room == room -->
          {% endfor %} <!-- doors -->
-      {% endfor %} <!-- doors -->
+      {% endfor %} <!-- values -->
       </p>
-      <p>Refrigerators: 
-      {% for value in refrigerators.values %}
-         {% if value.0.room == room %}
-            {{ value }}
-         {% endif %}
-      {% endfor %} <!-- refrigerators -->
+      <p> 
+      {% for values in refrigerators.values %}
+         {% for refrigerator in values %}
+            {% if refrigerator.room == room %}
+               {{ refrigerator.name }}
+               <div id="gauge_fridge_{{ refrigerator.pk }}" class="200x160px"></div>
+               <script>
+                  var g = new JustGage({
+                     id: "gauge_fridge_{{ refrigerator.pk }}",
+                     value: {{ refrigerator.fridge_current_temp }},
+                     min: 20,
+                     max: 50,
+                     title: "Current Fridge Temperature",
+                  });
+               </script>
+               <div id="gauge_freezer_{{ refrigerator.pk }}" class="200x160px"></div>
+               <script>
+                  var g = new JustGage({
+                     id: "gauge_freezer_{{ refrigerator.pk }}",
+                     value: {{ refrigerator.freezer_current_temp }},
+                     min: -10,
+                     max: 10,
+                     title: "Current Freezer Temperature",
+                  });
+               </script>
+               <label for="slider_fridge_{{ refrigerator.pk }}">Fridge Set Temp</label>
+               <input id="slider_fridge_{{ refrigerator.pk }}" type="text" data-slider-min="20" data-slider-max="50" data-slider-step="1" data-slider-value="{{ refrigerator.fridge_set_temp }}" data-slider-orientation="vertical"/>
+               <script>
+                  var slider = new Slider("#slider_fridge_{{ refrigerator.pk }}", {
+                     reversed : true,
+                     tooltip: 'always'
+                  });
+                  slider.on("slide", throttle(function (value) {
+                        update_fridge_value({{ refrigerator.pk }}, value);
+                     }, 1000)
+                  );
+               </script>
+               <label style="margin-left: 50px;" for="slider_freezer_{{ refrigerator.pk }}">Freezer Set Temp</label>
+               <input id="slider_freezer_{{ refrigerator.pk }}" type="text" data-slider-min="-10" data-slider-max="10" data-slider-step="1" data-slider-value="{{ refrigerator.freezer_set_temp }}" data-slider-orientation="vertical"/>
+               <script>
+                  var slider = new Slider("#slider_freezer_{{ refrigerator.pk }}", {
+                     reversed : true,
+                     tooltip: 'always'
+                  });
+                  slider.on("slide", throttle(function (value) {
+                        update_freezer_value({{ refrigerator.pk }}, value);
+                     }, 1000)
+                  );
+               </script>
+            {% endif %} <!-- if refrigerator.room == room -->
+         {% endfor %} <!-- refrigerators -->
+      {% endfor %} <!-- values -->
       </p>
    </div> <!-- room container -->
    {% endfor %} <!-- rooms -->
