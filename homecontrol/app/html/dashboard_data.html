@@ -1,8 +1,37 @@
+   <script>
+   var map;
+   function initialize() {
+      var mapOptions = {
+         scrollwheel: false,
+         zoom: 17
+      };
+      map = new google.maps.Map(document.getElementById('map-canvas'),
+                                mapOptions);
+      var pos = new google.maps.LatLng({{ home.position.latitude }},
+                                       {{ home.position.longitude}});
+      marker = new google.maps.Marker({
+         map: map,
+         position: pos,
+         title: '{{ home.name }}',
+         draggable: false
+      });
+      map.setCenter(pos);
+   }
+
+  $(function() {
+      initialize();
+  });
+   </script>
+   <div class="row" style="padding-left:100px">
+      <div style="height:300px; width:75%" id="map-canvas"></div>
+   </div>
+   
    <h2>{{ home.name }}</h2>
-   <p>Thermostats: 
+   <p>
    {% for values in thermostats.values %}
       {% for thermostat in values %}
          {% if thermostat.home == home %}
+            <p>{{ thermostat.name }}</p>
             <div id="gauge{{ thermostat.pk }}" class="200x160px"></div>
             <script>
                var g = new JustGage({
