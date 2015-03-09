@@ -12,7 +12,7 @@ custom models.
 
 
 class ThermostatAdmin(admin.ModelAdmin):
-   list_display = ('name','home','current_temp','set_temp')
+   list_display = ('name','home','current_temp','set_temp','pk')
    search_fields = ('name','home')
 
 class ThermostatInline(admin.StackedInline):
@@ -20,7 +20,7 @@ class ThermostatInline(admin.StackedInline):
 
    
 class DoorAdmin(admin.ModelAdmin):
-   list_display = ('name','room','is_locked','is_open')
+   list_display = ('name','room','is_locked','is_open','pk')
    search_fields = ('name','room')
 
 class DoorInline(admin.StackedInline):
@@ -28,7 +28,7 @@ class DoorInline(admin.StackedInline):
 
    
 class LightAdmin(admin.ModelAdmin):
-   list_display = ('name','room','switch_mode','is_on')
+   list_display = ('name','room','is_on','pk')
    search_fields = ('name','room')
 
 class LightInline(admin.StackedInline):
@@ -36,7 +36,7 @@ class LightInline(admin.StackedInline):
 
 
 class RefrigeratorAdmin(admin.ModelAdmin):
-   list_display = ('name','room','fridge_set_temp','fridge_current_temp','freezer_set_temp','freezer_current_temp',)
+   list_display = ('name','room','fridge_set_temp','fridge_current_temp','freezer_set_temp','freezer_current_temp','pk')
    search_fields = ('name','room')
 
 class RefrigeratorInline(admin.StackedInline):
@@ -44,7 +44,7 @@ class RefrigeratorInline(admin.StackedInline):
    
    
 class RoomAdmin(admin.ModelAdmin):
-   list_display = ('home','name','room_type',)
+   list_display = ('pk','home','name','room_type',)
    search_fields = ('name','home')
    inlines = (DoorInline, LightInline, RefrigeratorInline,)
 
@@ -53,7 +53,7 @@ class RoomInline(admin.StackedInline):
 
 
 class HomeAdmin(admin.ModelAdmin):
-   list_display = ('name','owner','position','secret_key',)
+   list_display = ('name','owner','position','secret_key','pk')
    search_fields = ('name',)
    readonly_fields=('secret_key',)
    inlines = (ThermostatInline, RoomInline, )

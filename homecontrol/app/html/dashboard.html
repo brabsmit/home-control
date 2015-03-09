@@ -21,17 +21,26 @@ $.ajaxSetup({
     }
 });
 
-function update_light(element, pk, state) {
+function update_light(element, pk) {
    var l = Ladda.create(element);
+   var is_on = $(element).val() === 'true';
    l.start();
    $.ajax({
       type: "PATCH",
       url: "/api/light/"+pk+"/", 
       data: {
-         'is_on' : !state,
+         'is_on' : !is_on,
       }
    }).done(function(response){
-         console.log(response);
+      if(response.is_on) {
+         $(element).removeClass('btn-danger');
+         $(element).addClass('btn-success');
+         $(element).val('true');
+      } else {
+         $(element).removeClass('btn-success');
+         $(element).addClass('btn-danger');
+         $(element).val('false');
+      }
    })
    .always(function() { l.stop(); });
    return false;
@@ -62,37 +71,41 @@ function update_light(element, pk, state) {
    <div id="room-container">
       <p>Room: {{ room.name }}</p>
       <p>Lights: 
-      {% for value in lights.values %}
-         {% if value.0.room == room %}
-            {% if value.0.is_on %}
-            <a href="javascript:void(0)"><button class="btn btn-danger ladda-button" id="button_light_{{ value.0.pk }}" data-style="zoom-in"><span class="ladda-label">{{ value.0.name }}</span></button></a>
-            <script>
-            $(function() {
-               $('#button_light_{{ value.0.pk }}').click(function(e){
-                  e.preventDefault();
-                  update_light(this, {{ value.0.pk }}, {{ value.0.is_on|yesno:"true,false" }})
+      {% for values in lights.values %}
+         {% for light in values %}
+            {% if light.room == room %}
+               {% if light.is_on %}
+               <a href="javascript:void(0)"><button class="btn btn-success ladda-button" id="button_light_{{ light.pk }}" value="true" data-style="zoom-in"><span class="ladda-label">{{ light.name }}</span></button></a>
+               <script>
+               $(function() {
+                  $('#button_light_{{ light.pk }}').click(function(e){
+                     e.preventDefault();
+                     update_light(this, {{ light.pk }})
+                  });
                });
-            });
-            </script>
-            {% else %}
-            <a href="javascript:void(0)"><button class="btn btn-success ladda-button" id="button_light_{{ value.0.pk }}" data-style="zoom-in"><span class="ladda-label">{{ value.0.name }}</span></button></a>
-            <script>
-            $(function() {
-               $('#button_light_{{ value.0.pk }}').click(function(e){
-                  e.preventDefault();
-                  update_light(this, {{ value.0.pk }}, {{ value.0.is_on|yesno:"true,false" }})
+               </script>
+               {% else %}
+               <a href="javascript:void(0)"><button class="btn btn-danger ladda-button" id="button_light_{{ light.pk }}" value="false" data-style="zoom-in"><span class="ladda-label">{{ light.name }}</span></button></a>
+               <script>
+               $(function() {
+                  $('#button_light_{{ light.pk }}').click(function(e){
+                     e.preventDefault();
+                     update_light(this, {{ light.pk }})
+                  });
                });
-            });
-            </script>
-            {% endif %}
-         {% endif %}
-      {% endfor %} <!-- lights -->
+               </script>
+               {% endif %} <!-- if light.is_on -->
+            {% endif %} <!-- if light.room == room -->
+         {% endfor %} <!-- lights -->
+      {% endfor %} <!-- values -->
       </p>
       <p>Doors: 
-      {% for value in doors.values %}
-         {% if value.0.room == room %}
-            {{ value }}
-         {% endif %}
+      {% for values in doors.values %}
+         {% for door in values %}
+            {% if door.room == room %}
+               {{ door.name }}
+            {% endif %} <!-- if door.room == room -->
+         {% endfor %} <!-- doors -->
       {% endfor %} <!-- doors -->
       </p>
       <p>Refrigerators: 

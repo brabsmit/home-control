@@ -7,7 +7,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
 from geoposition import Geoposition
 from app.models import Home, Room, Light, Door, Refrigerator, Thermostat
-from app.serializers import LightSerializer, DoorSerializer, RefrigeratorSerializer, ThermostatSerializer
+from app.serializers import HomeSerializer, RoomSerializer, LightSerializer, DoorSerializer, RefrigeratorSerializer, ThermostatSerializer, UserSerializer
 
 from rest_framework.response import Response
 from rest_framework import viewsets
@@ -18,6 +18,25 @@ from sets import Set
 import json
 
 # Create your views here.
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+    
+class HomeViewSet(viewsets.ModelViewSet):
+   """
+   API endpoint that allows homes to be viewed or edited.
+   """
+   queryset = Home.objects.all()
+   serializer_class = HomeSerializer
+   
+class RoomViewSet(viewsets.ModelViewSet):
+   """
+   API endpoint that allows rooms to be viewed or edited.
+   """
+   queryset = Room.objects.all()
+   serializer_class = RoomSerializer
 
 class LightViewSet(viewsets.ModelViewSet):
    """

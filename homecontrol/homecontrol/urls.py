@@ -5,10 +5,13 @@ from app import views
 
 
 router = routers.DefaultRouter()
+router.register(r'home', views.HomeViewSet)
+router.register(r'room', views.RoomViewSet)
 router.register(r'light', views.LightViewSet)
 router.register(r'refrigerator', views.RefrigeratorViewSet)
 router.register(r'thermostat', views.ThermostatViewSet)
 router.register(r'door', views.DoorViewSet)
+router.register(r'user', views.UserViewSet)
 
 
 urlpatterns = patterns('',

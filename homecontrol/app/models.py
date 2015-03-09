@@ -109,18 +109,6 @@ class Light(models.Model):
    
    ## boolean indicating if the light is on or off.
    is_on = models.BooleanField(default=False)
-   
-   BINARY = 'BN'
-   VARIABLE = 'VB'
-   SWITCH_MODE_CHIOICES = (
-      (BINARY, 'On/Off'),
-      (VARIABLE, 'Variable'),
-   )
-   
-   ## operation mode. Either binary or variable load.
-   switch_mode = models.CharField(max_length=2,
-      choices = SWITCH_MODE_CHIOICES,
-                                       default=BINARY)
                                        
 
 class Refrigerator(models.Model):
@@ -169,19 +157,6 @@ class Thermostat(models.Model):
    
    ## temperature set by the user
    set_temp = models.IntegerField()
-   
-   AIR_CONDITION = 'AC'
-   HEATER = 'HT'
-   FAN = 'FN'
-   CONTROL_CHOICES = (
-      (AIR_CONDITION, 'Air Conditioner'),
-      (HEATER, 'Heater'),
-      (FAN, 'Fan'),
-   )
-   
-   ## operation mode. Either binary or variable load.
-   controls = snippets.MultiSelectField(max_length=3,
-      choices = CONTROL_CHOICES)
    
 
 class Door(models.Model):
