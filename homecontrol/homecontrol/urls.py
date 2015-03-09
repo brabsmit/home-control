@@ -22,6 +22,7 @@ urlpatterns = patterns('',
    url(r'^signout/$', 'app.views.signout'),
    url(r'^register/$', 'app.views.register'),
    url(r'^dashboard/$', 'app.views.dashboard'),
+   url(r'^dashboard/refresh/$', 'app.views.dashboard_refresh'),
    url(r'^settings/$', 'app.views.settings'),
    url(r'^settings/account/$', 'app.views.settings_account'),
    

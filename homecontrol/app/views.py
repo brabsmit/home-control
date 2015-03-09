@@ -146,25 +146,55 @@ def dashboard(request):
       user = User.objects.get(username=request.user)
       # get homes
       context['homes'] = Home.objects.filter(owner=user)
+      context['home'] = Home.objects.filter(owner=user)[0]
+      context['rooms'] = {}
+      context['lights'] = {}
+      context['refrigerators'] = {}
+      context['thermostats'] = {}
+      context['doors'] = {}
+      home = context['home']
+      # get rooms
+      context['rooms'] = Room.objects.filter(home=home)
+      # get thermostats
+      context['thermostats'][home.pk] = Thermostat.objects.filter(home=home)
+      # get devices
+      for room in context['rooms']:
+         # get lights
+         context['lights'][room.pk] = Light.objects.filter(room=room)
+         # get refrigerators
+         context['refrigerators'][room.pk] = Refrigerator.objects.filter(room=room)
+         # get doors
+         context['doors'][room.pk] = Door.objects.filter(room=room)
+   return render(request, 'dashboard.html', context)
+
+
+@login_required(login_url='/signin/')
+def dashboard_refresh(request):
+   context = {}
+   if request.method == 'GET':
+      pk = request.GET.get('pk')
+      user = User.objects.get(username=request.user)
+      # get homes
       context['rooms'] = {}
       context['lights'] = {}
       context['refrigerators'] = {}
       context['thermostats'] = {}
       context['doors'] = {}
       # get rooms
-      for home in context['homes']:
-         context['rooms'][home.pk] = Room.objects.filter(home=home)
-         # get thermostats
-         context['thermostats'][home.pk] = Thermostat.objects.filter(home=home)
-         # get devices
-         for room in context['rooms'][home.pk]:
-            # get lights
-            context['lights'][room.pk] = Light.objects.filter(room=room)
-            # get refrigerators
-            context['refrigerators'][room.pk] = Refrigerator.objects.filter(room=room)
-            # get doors
-            context['doors'][room.pk] = Door.objects.filter(room=room)
-   return render(request, 'dashboard.html', context)
+      home = Home.objects.get(pk=pk)
+      context['home'] = home
+      context['rooms'] = Room.objects.filter(home=home)
+      # get thermostats
+      context['thermostats'][home.pk] = Thermostat.objects.filter(home=home)
+      # get devices
+      for room in context['rooms']:
+         # get lights
+         context['lights'][room.pk] = Light.objects.filter(room=room)
+         # get refrigerators
+         context['refrigerators'][room.pk] = Refrigerator.objects.filter(room=room)
+         # get doors
+         context['doors'][room.pk] = Door.objects.filter(room=room)
+   return render(request, 'dashboard_data.html', context)
 
    
 @login_required(login_url='/signin/')

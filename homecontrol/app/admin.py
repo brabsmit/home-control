@@ -44,7 +44,7 @@ class RefrigeratorInline(admin.StackedInline):
    
    
 class RoomAdmin(admin.ModelAdmin):
-   list_display = ('pk','home','name','room_type',)
+   list_display = ('name','home','room_type','pk')
    search_fields = ('name','home')
    inlines = (DoorInline, LightInline, RefrigeratorInline,)
 

@@ -43,13 +43,28 @@
 </div>
 
 <div id="sidr">
-    <!-- Your content -->
-    <ul>
-        <li><a href="#">List 1</a></li>
-        <li class="active"><a href="#">List 2</a></li>
-        <li><a href="#">List 3</a></li>
-    </ul>
+   {% if homes %}
+      Homes
+      <ul>
+         {% for home in homes %}
+            <li><a href='javascript:get_home({{ home.pk }})'>{{ home.name }}</a></li>
+         {% endfor %}
+      </ul>
+   {% else %}
+      No homes to display
+   {% endif %}
 </div>
+
+<script>
+   function get_home(pk) {
+      $.get('/dashboard/refresh/',
+         { 'pk': pk },
+         function(data) {
+            $('#home-container').html(data);
+         }
+      );
+   }
+</script>
 
 <script>
 var margin = ['0px', '260px']
