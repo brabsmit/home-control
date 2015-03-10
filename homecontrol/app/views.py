@@ -146,7 +146,7 @@ def dashboard(request):
       user = User.objects.get(username=request.user)
       # get homes
       context['homes'] = Home.objects.filter(owner=user)
-      context['home'] = Home.objects.filter(owner=user)[0]
+      context['home'] = Home.objects.filter(owner=user).first()
       context['rooms'] = {}
       context['lights'] = {}
       context['refrigerators'] = {}
