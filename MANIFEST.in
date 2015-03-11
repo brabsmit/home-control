@@ -1,0 +1,5 @@
+include LICENSE
+include README.rst
+recursive-include homecontrol/static *
+recursive-include homecontrol/html *
+recursive-include docs *
