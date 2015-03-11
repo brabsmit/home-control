@@ -2,7 +2,7 @@
 Homecontrol
 =====
 
-***LIVE DEMO](http://ec2-54-153-19-113.us-west-1.compute.amazonaws.com/)***
+***[LIVE DEMO](http://ec2-54-153-19-113.us-west-1.compute.amazonaws.com/)***
 
 Sandbox user credentials:
 username: home
