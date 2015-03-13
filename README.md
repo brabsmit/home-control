@@ -2,6 +2,9 @@
 Homecontrol
 =====
 
+Created by:
+Bryan Smith - brabsmit@ucsc.edu
+
 ***[LIVE DEMO](http://ec2-54-153-19-113.us-west-1.compute.amazonaws.com/)***
 
 ***[Full Documentation](http://ec2-54-153-19-113.us-west-1.compute.amazonaws.com/documentation/)***
