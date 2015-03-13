@@ -55,12 +55,18 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
     'rest_framework',
     'rest_framework_swagger',
     'geoposition',
     'ws4redis',
     'app',
 )
+
+GRAPH_MODELS = {
+  'all_applications': True,
+  'group_models': True,
+}
 
 WEBSOCKET_URL = '/ws/'
 
