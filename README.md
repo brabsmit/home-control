@@ -25,6 +25,9 @@ Detailed documentation is in the "docs" directory.
 Quick start
 -----------
 
+If you'd rather install the package yourself and run it via a new instance
+of Django, follow these steps:
+
 Required packages:
   rest_framework,
   rest_framework_swagger,
