@@ -9,13 +9,13 @@ from geoposition import Geoposition
 from app.models import Home, Room, Light, Door, Refrigerator, Thermostat
 from app.serializers import HomeSerializer, RoomSerializer, LightSerializer, DoorSerializer, RefrigeratorSerializer, ThermostatSerializer, UserSerializer
 
-from rest_framework.response import Response
-from rest_framework import viewsets
-
 from django.db import IntegrityError
 
 from sets import Set
 import json
+
+from rest_framework.response import Response
+from rest_framework import viewsets
 
 # Create your views here.
 
@@ -65,39 +65,27 @@ class ThermostatViewSet(viewsets.ModelViewSet):
    """
    queryset = Thermostat.objects.all()
    serializer_class = ThermostatSerializer
-   
 
-# SettingsForm is an extension of an AuthenticationForm
-class SettingsForm(forms.Form):
-   # User settings
-   new_username = forms.CharField(max_length=254,
-                                  min_length=1,
-                                  required=False,
-                                  widget=forms.TextInput(attrs={
-                                     'class' : 'form-control input-md'}))
-   error_messages = {
-     'password_mismatch': ("The two password fields didn't match."),
-   }
-   password1 = forms.CharField(label=("Password"),
-      widget=forms.PasswordInput(attrs={'class' : 'form-control input-md'}),
-      required=False)
-   password2 = forms.CharField(label=("Password confirmation"),
-      widget=forms.PasswordInput(attrs={'class' : 'form-control input-md'}),
-      help_text=("Enter the same password as above, for verification."),
-      required=False)
-
-   def clean_password2(self):
-      password1 = self.cleaned_data.get("password1")
-      password2 = self.cleaned_data.get("password2")
-      if password1 and password2 and password1 != password2:
-         raise forms.ValidationError(self.error_messages['password_mismatch'])
-      return password2
 
 def home(request):
+   """
+   View that serves the home page, index.html.
+
+   When a user visits the website at root, this method 
+   is called to return index.html.
+   """
    return render(request, 'index.html')
 
    
 def register(request):
+   """
+   View that serves a registration page, register.html.
+
+   When a user visits the register page, a new form
+   is generated and passed to the register.html template.
+   When a user submits this form, a POST request comes
+   in to this method and validates the form, adding the user.  
+   """
    if request.user.is_authenticated():
       return HttpResponseRedirect("/dashboard/")
    else:
@@ -118,6 +106,19 @@ def register(request):
 
       
 def signin(request):
+    """
+    View that serves a signin page, signin.html.
+
+    When a user wants to sign in, this method generates a signin
+    form via django.contrib.auth.forms.AuthenticationForm. The
+    form submission comes back to this method to be validated
+    and signs the user in.
+
+    Sign in guarantees that the user is entitled to the data
+    they are trying to access within the server. With a signed-in
+    user, validation can be performed by verifying the data 
+    belongs to the user (i.e. home.owner == request.user).
+    """
     if request.method == 'POST':
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():
@@ -135,12 +136,24 @@ def signin(request):
 
     
 def signout(request):
+   """
+   This method is called to log a user out.
+   """
    logout(request)
    return HttpResponseRedirect("/signin/")
 
    
 @login_required(login_url='/signin/')
 def dashboard(request):
+   """
+   Main method to serve the dashboard template with all
+   the variables precalculated. This will generate a form-like
+   interface with responsive buttons and sliders to control
+   various devices within a home.
+
+   This view is protected by the @login_required decorator,
+   redirecting unauthenticated users to the signin page.
+   """
    context = {}
    if request.method == 'GET':
       user = User.objects.get(username=request.user)
@@ -170,6 +183,13 @@ def dashboard(request):
 
 @login_required(login_url='/signin/')
 def dashboard_refresh(request):
+   """
+   AJAX-driven method to update the dashboard with the given home pk.
+
+   Designed to be called via AJAX, this method returns a container
+   to be loaded inside the dashboard via $.get() containing new
+   data relevant to the selected home via pk.
+   """
    context = {}
    if request.method == 'GET':
       pk = request.GET.get('pk')

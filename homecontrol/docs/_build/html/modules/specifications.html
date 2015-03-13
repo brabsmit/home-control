@@ -1,0 +1,408 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Specifications &mdash; django-homecontrol 1.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="django-homecontrol 1.0 documentation" href="../index.html"/>
+        <link rel="next" title="Models" href="models.html"/>
+        <link rel="prev" title="Welcome to django-homecontrol’s documentation!" href="../index.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+          <a href="../index.html" class="fa fa-home"> django-homecontrol</a>
+        
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">Specifications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#restful-api">RESTful API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#database-schema">Database Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#administrative-server-interfacing">Administrative Server Interfacing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#user-dashboard">User Dashboard</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="views.html">Views</a></li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">django-homecontrol</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+    <li>Specifications</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="../_sources/modules/specifications.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="specifications">
+<h1>Specifications<a class="headerlink" href="#specifications" title="Permalink to this headline">¶</a></h1>
+<p>This project aims to provide a proof-of concept for the final project in
+Computer Networking, CMPE 150, at the University of California, Santa Cruz.
+In this project, the aim was to explore the following:</p>
+<p>[1] HOME CONTROL PROTOCOL: Design and specify a reliable IP­-based protocol to control
+(check and manipulate state) some IP­-enabled devices (stereo, tv, vcr, lamps, heater) in your
+home from remote, so that you can go on vacation and need not worry about whether you
+switched off the lights. This protocol should be accessible from a webpage or app and allow
+you to configure your home devices with timers.</p>
+<p>In this project, the following specifications were achieved:</p>
+<ul>
+<li><p class="first">IP-based protocol built on the <a class="reference external" href="http://www.django-rest-framework.org/">Django REST Framework</a></p>
+</li>
+<li><p class="first">Generic API endpoints for devices to check/manipulate own state
+(<a class="reference external" href="http://ec2-54-153-19-113.us-west-1.compute.amazonaws.com/docs/">Source</a>) with support
+for the following devices:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>Light</dt>
+<dd><ul class="first last simple">
+<li>Toggle on/off</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Refrigerator</dt>
+<dd><ul class="first last simple">
+<li>View/Set fridge &amp; freezer temperature</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Thermostat</dt>
+<dd><ul class="first last simple">
+<li>View/Set thermostat temperature</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Door</dt>
+<dd><ul class="first last simple">
+<li>View door open/closed</li>
+<li>View/Toggle door locked/unlocked</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<div><ul>
+<li><p class="first">Website dashboard control of devices linked to user</p>
+<blockquote>
+<div><ul class="simple">
+<li>Homes and everything in them restricted to owner only</li>
+<li>Administrative interface to create models for the user</li>
+<li>Switch between different homes the user may own</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="restful-api">
+<h1>RESTful API<a class="headerlink" href="#restful-api" title="Permalink to this headline">¶</a></h1>
+<p>The API was built with flexibility and expandability in mind. Since the server was
+created before the devices, the API specificaitons were made general enough such that
+any device following the specification would be compatible. The API was also
+exstensibly documented via <a class="reference external" href="http://swagger.io/">Swagger UI</a>. The API has the
+following controls:</p>
+<ul class="simple">
+<li>Home<ul>
+<li><a class="reference external" href="http://ec2-54-153-19-113.us-west-1.compute.amazonaws.com/docs/#!/home/Home">Create new home</a></li>
+<li><a class="reference external" href="http://ec2-54-153-19-113.us-west-1.compute.amazonaws.com/docs/#!/home/Home_0_1_2_3_4">Delete existing home</a></li>
+</ul>
+</li>
+<li>Room<ul>
+<li><a class="reference external" href="http://ec2-54-153-19-113.us-west-1.compute.amazonaws.com/docs/#!/room/Room">Create new room</a></li>
+<li><a class="reference external" href="http://ec2-54-153-19-113.us-west-1.compute.amazonaws.com/docs/#!/room/Room_0_1_2_3_4">Delete existing room</a></li>
+</ul>
+</li>
+<li>Thermostat<ul>
+<li><a class="reference external" href="http://ec2-54-153-19-113.us-west-1.compute.amazonaws.com/docs/#!/thermostat/Thermostat">Create new thermostat</a></li>
+<li><a class="reference external" href="http://ec2-54-153-19-113.us-west-1.compute.amazonaws.com/docs/#!/thermostat/Thermostat_0_1_2_3">Modify existing thermostat</a></li>
+<li><a class="reference external" href="http://ec2-54-153-19-113.us-west-1.compute.amazonaws.com/docs/#!/thermostat/Thermostat_0_1_2_3_4">Delete existing thermostat</a></li>
+</ul>
+</li>
+<li>Door<ul>
+<li><a class="reference external" href="http://ec2-54-153-19-113.us-west-1.compute.amazonaws.com/docs/#!/door/Door">Create new door</a></li>
+<li><a class="reference external" href="http://ec2-54-153-19-113.us-west-1.compute.amazonaws.com/docs/#!/door/Door_0_1_2_3">Modify existing door</a></li>
+<li><a class="reference external" href="http://ec2-54-153-19-113.us-west-1.compute.amazonaws.com/docs/#!/door/Door_0_1_2_3_4">Remove existing door</a></li>
+</ul>
+</li>
+<li>Light<ul>
+<li><a class="reference external" href="http://ec2-54-153-19-113.us-west-1.compute.amazonaws.com/docs/#!/light/Light">Create new light</a></li>
+<li><a class="reference external" href="http://ec2-54-153-19-113.us-west-1.compute.amazonaws.com/docs/#!/light/Light_0_1_2_3">Modify existing light</a></li>
+<li><a class="reference external" href="http://ec2-54-153-19-113.us-west-1.compute.amazonaws.com/docs/#!/light/Light_0_1_2_3_4">Remove existing light</a></li>
+</ul>
+</li>
+<li>Refrigerator<ul>
+<li><a class="reference external" href="http://ec2-54-153-19-113.us-west-1.compute.amazonaws.com/docs/#!/refrigerator/Refrigerator">Create new refrigerator</a></li>
+<li><a class="reference external" href="http://ec2-54-153-19-113.us-west-1.compute.amazonaws.com/docs/#!/refrigerator/Refrigerator_0_1_2_3">Modify existing refrigerator</a></li>
+<li><a class="reference external" href="http://ec2-54-153-19-113.us-west-1.compute.amazonaws.com/docs/#!/refrigerator/Refrigerator_0_1_2_3_4">Remove existing refrigerator</a></li>
+</ul>
+</li>
+</ul>
+<p>The system is designed such that the devices should be able to self register, storing the primary key
+value that links it to the database. This is the value the devices uses to reference itself when
+making a mnodification. Example software flow:</p>
+<div class="highlight-guess"><div class="highlight"><pre># Sample code for a light to register itself in system. Assumes the
+# light knows which room it belongs to.
+
+# POST to /lights/ endpoint, creating a new light in the database
+curl -X POST \
+-H &quot;Content-Type: application/json&quot; \
+-d &#39;{&quot;room&quot;:&quot;/api/room/1/&quot;, &quot;name&quot;: &quot;New Light&quot;}&#39; \
+http://ec2-54-153-19-113.us-west-1.compute.amazonaws.com/api/light/
+
+# The following is then returned by the server.
+# The light must take note of the pk, which is used in the future.
+{&quot;room&quot;:&quot;http://ec2-54-153-19-113.us-west-1.compute.amazonaws.com/api/room/1/&quot;,&quot;name&quot;:&quot;New Light&quot;,&quot;is_on&quot;:false,&quot;pk&quot;:34}
+</pre></div>
+</div>
+<p>With the device registered with the system, it now has access to an endpoint to modify its current state:</p>
+<div class="highlight-guess"><div class="highlight"><pre># Sample code for a light to modify its state.
+
+# PATCH to /lights/pk/ where pk was given at creation
+curl -X PATCH \
+-H &quot;Content-Type: application/json&quot; \
+-d &#39;{&quot;is_on&quot;, &quot;true&quot;}&#39; \
+http://ec2-54-153-19-113.us-west-1.compute.amazonaws.com/api/light/34/
+</pre></div>
+</div>
+<p>You can use this as a crude way to verify that devices can be created/modified as per the requisite.</p>
+</div>
+<div class="section" id="database-schema">
+<h1>Database Schema<a class="headerlink" href="#database-schema" title="Permalink to this headline">¶</a></h1>
+<p>The devices in this application were designed to have a nested relationship as follows:</p>
+<p>User -&gt; Home -&gt; Room -&gt; Device</p>
+<p>If we were given the pk to a device, we could traverse the tree back up to get all pertinent
+information about its location, context, and owner. The database has the following graph:</p>
+<img alt="http://i.imgur.com/VGWMbRV.png?1" src="http://i.imgur.com/VGWMbRV.png?1" />
+<p>A typical User model would have the following attributes:</p>
+<div class="highlight-guess"><div class="highlight"><pre>User {
+        Home {
+                Thermostat,
+                Room {
+                        Light,
+                        Door,
+                        ...
+                },
+                Room {
+                        Light,
+                        Refrigerator,
+                        ...
+                },
+                ...
+        },
+        ...
+}
+</pre></div>
+</div>
+<p>As you can see, a user can have multiple homes. Within those homes, there can be
+any number of rooms with any combination of devices that describe the room.</p>
+</div>
+<div class="section" id="administrative-server-interfacing">
+<h1>Administrative Server Interfacing<a class="headerlink" href="#administrative-server-interfacing" title="Permalink to this headline">¶</a></h1>
+<p>With the ability to create and modify devices exposed to the world, there needs
+to be a way to link those devices with a user model accessible via a web
+application. Since this is a proof-of-concept, the management of resources
+on the server side is limited to an administrator interface. This is not
+production-worthy, but is an excellent tool to prove that things work.</p>
+<p>The <a class="reference external" href="http://ec2-54-153-19-113.us-west-1.compute.amazonaws.com/admin/">Administrator Interface</a>
+is available to the &#8220;instructor&#8221; user (don&#8217;t tell anyone, but the password is &#8220;networking&#8221;).</p>
+<p>Once logged in, the admin is presented with all the models that can be
+modified. Currently, there are three homes, two that belong to the instructor
+and one that belongs to a test user (explained later). Clicking on a home will
+bring up that specific home&#8217;s first-layer settings, such as its location, name, owner,
+and thermostat.</p>
+<p>From this interface, models can be added and linked. Any changes made in this interface
+will be reflected on the dashboard for the user being changed.</p>
+</div>
+<div class="section" id="user-dashboard">
+<h1>User Dashboard<a class="headerlink" href="#user-dashboard" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="http://ec2-54-153-19-113.us-west-1.compute.amazonaws.com/dashboard/">Live Demo</a></p>
+<p>(Log in as instructor with credentials provided above)</p>
+<p>The dashboard was bult with responsiveness as the first priority. In Django&#8217;s
+web model, requests are served by rendering templates with context. Context is
+a python dictionary defined at run-time of various variables pertinent to
+the creation of the page content. For example, the dashboard has a table with
+a list of homes. This table has the following html:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;ul&gt;</span>
+{% for home in homes %}
+        <span class="nt">&lt;li&gt;</span> {{ home.name }} <span class="nt">&lt;/li&gt;</span>
+{% endfor %}
+<span class="nt">&lt;/ul&gt;</span>
+</pre></div>
+</div>
+<p>As you can see, this is clearly not pure html. The brackets signify
+a Django qualifier that is rendered as the page is loaded. On the server
+side, there is code to populate an array of homes for translation:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">dashboard</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">homes</span> <span class="o">=</span> <span class="n">Home</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">owner</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+        <span class="c"># Assuming an array of Device objects has been instantiated</span>
+        <span class="k">for</span> <span class="n">home</span> <span class="ow">in</span> <span class="n">homes</span><span class="p">:</span>
+                <span class="n">context</span><span class="p">[</span><span class="s">&#39;homes&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">home</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">&#39;dashboard.html&#39;</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The HTML served to the client will resemble something like this:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;ul&gt;</span>
+        <span class="nt">&lt;li&gt;</span> My Home <span class="nt">&lt;/li&gt;</span>
+        <span class="nt">&lt;li&gt;</span> Vacation Home <span class="nt">&lt;/li&gt;</span>
+<span class="nt">&lt;/ul&gt;</span>
+</pre></div>
+</div>
+<p>After the page is loaded, there are many buttons and sliders that
+are created. These correspond to actions that modify the state
+of the devices specified on the page. For instance, lights have
+a button that is green when the light is on, and red when the
+light is off. If the user clicks the button, a jQuery AJAX request
+is made to the server which toggles the state of the light. If the
+toggle was successful, the button will toggle its color.</p>
+<p>This method is true for all actions on the page, including the slider.</p>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="models.html" class="btn btn-neutral float-right" title="Models">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../index.html" class="btn btn-neutral" title="Welcome to django-homecontrol’s documentation!"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015, Bryan Smith.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
