@@ -11,6 +11,14 @@ password: control
 Homecontrol is a simple Django app that provides proof-of-concept
 for the generic control of any number of internet-connected homes.
 
+A generic REST API is exposed to devices in a home that are to be
+controlled and/or viewed by a user via a dashboard. Device
+state and control information are stored in a sqlite3 database
+and retrieved via AJAX for the user to view/manipulate.
+
+The API itself is documented [here](http://ec2-54-153-19-113.us-west-1.compute.amazonaws.com/).
+From this interface, you can play around with adding, modifying, and deleting 
+(not recommended) devices, homes, and rooms.
 
 Detailed documentation is in the "docs" directory.
 
